@@ -2405,7 +2405,7 @@ async function searchAnime(url) {
     let transformedAnime = {
       animeId: Number(anime.vod_id), // Mapping animeId to id
       bangumiId: String(anime.vod_id), // Mapping bangumiId to id
-      animeTitle: `${anime.vod_name}(${anime.vod_year})【${anime.type_name}】from vod`, // Mapping animeTitle to titleTxt
+      animeTitle: anime.vod_name, // Mapping animeTitle to titleTxt
       type: anime.type_name, // Mapping type to cat_name
       typeDescription: anime.type_name, // Mapping typeDescription to cat_name
       imageUrl: anime.vod_pic, // Mapping imageUrl to cover
@@ -2458,7 +2458,7 @@ async function searchAnime(url) {
     let transformedAnime = {
       animeId: Number(anime.id), // Mapping animeId to id
       bangumiId: String(anime.id), // Mapping bangumiId to id
-      animeTitle: `${anime.titleTxt}(${anime.year})【${anime.cat_name}】from 360`, // Mapping animeTitle to titleTxt
+      animeTitle: anime.titleTxt, // Mapping animeTitle to titleTxt
       type: anime.cat_name, // Mapping type to cat_name
       typeDescription: anime.cat_name, // Mapping typeDescription to cat_name
       imageUrl: anime.cover, // Mapping imageUrl to cover
@@ -2497,7 +2497,7 @@ async function searchAnime(url) {
     let transformedAnime = {
       animeId: Number(anime.mediaId), // Mapping animeId to id
       bangumiId: String(anime.mediaId), // Mapping bangumiId to id
-      animeTitle: `${anime.title}(${anime.year})【${anime.type}】from renren`, // Mapping animeTitle to titleTxt
+      animeTitle: anime.title, // Mapping animeTitle to titleTxt
       type: anime.type, // Mapping type to cat_name
       typeDescription: anime.type, // Mapping typeDescription to cat_name
       imageUrl: anime.imageUrl, // Mapping imageUrl to cover
@@ -2647,7 +2647,7 @@ async function searchEpisodes(url) {
   }
 
   // 先搜索动漫
-  let searchUrl = new URL(url.href.replace("/search/episodes", `/search/anime?keyword=${anime}`));
+  let searchUrl = new URL(`/search/anime?keyword=${anime}`, url.origin);
   const searchRes = await searchAnime(searchUrl);
   const searchData = await searchRes.json();
   
@@ -2666,7 +2666,7 @@ async function searchEpisodes(url) {
 
   // 遍历所有找到的动漫，获取它们的集数信息
   for (const animeItem of searchData.animes) {
-    const bangumiUrl = new URL(url.href.replace("/search/episodes", `/bangumi/${animeItem.bangumiId}`));
+    const bangumiUrl = new URL(`/bangumi/${animeItem.bangumiId}`, url.origin);
     const bangumiRes = await getBangumi(bangumiUrl.pathname);
     const bangumiData = await bangumiRes.json();
     
